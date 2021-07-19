@@ -21,7 +21,7 @@ export default function Home() {
       justifyContent="center"
       paddingTop="40"
       w="100vw"
-      h="100vh"
+      minHeight="100vh"
     >
       <Flex
         flexDirection="column"
