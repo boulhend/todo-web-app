@@ -25,12 +25,12 @@ const todo = ({ userTodos }) => {
       alert(error);
     }
   };
-  useEffect(() => {
+  useEffect(()=>{
     if (!auth.user) {
       router.push('/');
     }
-  }, [auth.user]);
-
+  },[])
+  
   return (
     <>
       {auth.user ? (
@@ -63,9 +63,14 @@ const todo = ({ userTodos }) => {
             justifyContent="center"
             width="100%"
           >
-            <Flex flexDirection="column" width="100%" >
+            <Flex flexDirection="column" width="100%">
               <Flex alignItems="baseline">
-                <Heading fontSize="lg" fontWeight="bold" marginBottom="1rem" marginRight="0.5rem">
+                <Heading
+                  fontSize="lg"
+                  fontWeight="bold"
+                  marginBottom="1rem"
+                  marginRight="0.5rem"
+                >
                   TODAY
                 </Heading>
                 <Text fontSize="sm" color="gray.500">

@@ -11,13 +11,6 @@ export default function Home() {
     router.push(`/todo/${auth.user.uid}`);
     return <Text>Loading ...</Text>;
   }
-  useEffect(()=>{
-    if (auth.user) {
-      router.prefetch(`/todo/${auth.user.uid}`);
-      return <Text>Loading ...</Text>;
-    }
-    
-  },[])
   return (
     <Flex
       backgroundColor="gray.50"
