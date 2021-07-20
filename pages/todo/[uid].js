@@ -14,9 +14,7 @@ const Todo = ({ userTodos }) => {
   const router = useRouter();
   const TODAY = dateFormat(new Date());
   const [toggleAddTask, setToggleAddTask] = useState(false);
-  const [data, setData] = useState(() =>
-    userTodos.filter((todo) => todo.createdAt === TODAY)
-  );
+  const [data, setData] = useState([]);
   const handleLogout = async () => {
     try {
       await auth.signOut();
@@ -25,12 +23,16 @@ const Todo = ({ userTodos }) => {
       alert(error);
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     if (!auth.user) {
       router.push('/');
     }
-  },[auth.user])
-  
+  }, [auth.user]);
+  useEffect(() => {
+    if (userTodos !== undefined) {
+      setData(() => userTodos.filter((todo) => todo.createdAt === TODAY));
+    }
+  }, []);
   return (
     <>
       {auth.user ? (
