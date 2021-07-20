@@ -4,14 +4,16 @@ import NextLink from 'next/link';
 import { Logo } from '../../styles/theme';
 import { useAuth } from '../../lib/auth';
 import { useRouter } from 'next/router';
-import { useState,useEffect } from 'react';
-import {getUserTodos,getAllUser} from "../../lib/db-admin"
+import { useState, useEffect } from 'react';
+import { getUserTodos, getAllUser } from '../../lib/db-admin';
 import AddTask from '../../components/AddTask';
+import OneTodo from '../../components/OneTodo'
 
-const todo = ({userTodos}) => {
+const todo = ({ userTodos }) => {
   const auth = useAuth();
   const router = useRouter();
-  const [toggleAddTask,setToggleAddTask]=useState(false)
+  const [toggleAddTask, setToggleAddTask] = useState(false);
+  const [data, setData] = useState(userTodos);
   const handleLogout = async () => {
     try {
       await auth.signOut();
@@ -54,25 +56,37 @@ const todo = ({userTodos}) => {
             backgroundColor="gray.50"
             paddingY="2rem"
             paddingX="20rem"
-            justifyContent="start"
             minHeight="100vh"
+            justifyContent="center"
+            width="100%"
           >
-            <Flex flexDirection="column">
-              <Heading fontSize="md" marginBottom="1rem">Todos</Heading>
-              {userTodos && userTodos.map(todo=><Text>{todo.todo}</Text>)}
-              {toggleAddTask && <AddTask toggle={toggleAddTask} handleToggle={setToggleAddTask}/>}
-              {!toggleAddTask &&<Button
-                variant="ghost"
-                size="md"
-                color="#dd4b39"
-                mt={3}
-                _hover={{ bg: 'gray.100' }}
-                leftIcon={<AddIcon w={3} h={3} mb={1} />}
-                alignSelf="start"
-                onClick={()=>setToggleAddTask(!toggleAddTask)}
-              >
-                Add task
-              </Button>}
+            <Flex flexDirection="column" width="100%">
+              <Heading fontSize="md" marginBottom="1rem">
+                Todos
+              </Heading>
+              {data && data.map( todo => <OneTodo key={JSON.stringify(todo.id)} todoId={todo.id} todo={todo} alignSelf="stretch"/>)}
+              {toggleAddTask && (
+                <AddTask
+                  toggle={toggleAddTask}
+                  handleToggle={setToggleAddTask}
+                  data={data}
+                  setData={setData}
+                />
+              )}
+              {!toggleAddTask && (
+                <Button
+                  variant="ghost"
+                  size="md"
+                  color="#dd4b39"
+                  mt={3}
+                  _hover={{ bg: 'gray.100' }}
+                  leftIcon={<AddIcon w={3} h={3} mb={1} />}
+                  alignSelf="start"
+                  onClick={() => setToggleAddTask(!toggleAddTask)}
+                >
+                  Add task
+                </Button>
+              )}
             </Flex>
           </Flex>
         </Flex>
@@ -83,21 +97,21 @@ const todo = ({userTodos}) => {
   );
 };
 export async function getStaticPaths() {
-    const users = await getAllUser()
-  
-    const paths = users.map((user) => ({
-      params: { uid: user.uid },
-    }))
-    return { paths, fallback: true }
+  const users = await getAllUser();
+
+  const paths = users.map((user) => ({
+    params: { uid: user.uid }
+  }));
+  return { paths, fallback: true };
 }
 
-export async function getStaticProps({params}) {
-    const userTodos=await getUserTodos(params.uid)
-    return {
-      props: {
-          userTodos
-      }, // will be passed to the page component as props
-    }
-  }
+export async function getStaticProps({ params }) {
+  const userTodos = await getUserTodos(params.uid);
+  return {
+    props: {
+      userTodos
+    } // will be passed to the page component as props
+  };
+}
 
 export default todo;

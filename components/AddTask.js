@@ -6,20 +6,24 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
 import { useAuth } from '../lib/auth';
 import { createTodo } from '../lib/db';
-
-const AddTask = ({ toggle, handleToggle }) => {
+import { v4 as uuidv4 } from 'uuid';
+const AddTask = ({ toggle, handleToggle, data, setData }) => {
   const { user } = useAuth();
   const [startDate, setStartDate] = useState(new Date());
   const [todoInput, setTodoInput] = useState('');
   const dateFormat = (date) => format(date, 'MM/dd/yyyy');
 
   const handleSumbmit = () => {
+    const id = uuidv4();
     const newTodo = {
-      uid:user.uid,
+      id,
+      uid: user.uid,
       todo: todoInput,
       createdAt: dateFormat(startDate)
     };
-    createTodo(newTodo);
+    setData([...data, newTodo]);
+    createTodo(id, newTodo);
+    setTodoInput('')
   };
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => {
