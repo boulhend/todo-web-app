@@ -1,91 +1,68 @@
-import { Heading, Button, Text, Link, Avatar, Flex } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
-import NextLink from 'next/link';
-import { Logo } from '../styles/theme';
+import { Flex, Link, Box, Heading, Text } from '@chakra-ui/react';
 import { useAuth } from '../lib/auth';
+import { Logo, Github, Google } from '../styles/theme';
 import { useRouter } from 'next/router';
+import SignInButton from '../components/SignInButton';
 import { useEffect } from 'react';
-import AddTask from '../components/AddTask';
-
-const todo = () => {
+export default function Home() {
   const auth = useAuth();
   const router = useRouter();
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-      router.push('/login');
-    } catch (error) {
-      alert(error);
+  if (auth.user) {
+    router.push(`/todo/${auth.user.uid}`);
+    return <Text>Loading ...</Text>;
+  }
+  useEffect(()=>{
+    if (auth.user) {
+      router.prefetch(`/todo/${auth.user.uid}`);
+      return <Text>Loading ...</Text>;
     }
-  };
-  useEffect(() => {
-    if (!auth.user) {
-      router.push('/login');
-    }
-  }, []);
-
+    
+  },[])
   return (
-    <>
-      {auth.user ? (
-        <Flex flexDirection="column" w="100vw">
-          <Flex
-            justifyContent="space-between"
-            alignItems="center"
-            boxShadow="lg"
-            padding="3"
-            paddingX="20rem"
-          >
-            <NextLink href="/" cursor="pointer" passHref>
-              <Link>
-                <Logo boxSize="10" />
-              </Link>
-            </NextLink>
-            <Flex alignItems="center">
-              <Link mr={3} onClick={handleLogout}>
-                Log out
-              </Link>
-              <Avatar src={auth.user?.photoURL} />
-            </Flex>
-          </Flex>
-
-          <Flex
-            backgroundColor="gray.50"
-            paddingY="2rem"
-            paddingX="20rem"
-            justifyContent="start"
-            minHeight="100vh"
-          >
-            <Flex flexDirection="column">
-              <Heading fontSize="md" marginBottom="1rem">Todos</Heading>
-              <AddTask/>
-              <Button
-                variant="ghost"
-                size="md"
-                color="#dd4b39"
-                mt={3}
-                _hover={{ bg: 'gray.100' }}
-                leftIcon={<AddIcon w={3} h={3} mb={1} />}
-                alignSelf="start"
-              >
-                Add task
-              </Button>
-            </Flex>
-          </Flex>
+    <Flex
+      backgroundColor="gray.50"
+      alignItems="start"
+      justifyContent="center"
+      paddingTop="40"
+      w="100vw"
+      minHeight="100vh"
+    >
+      <Flex
+        flexDirection="column"
+        backgroundColor="white"
+        padding="10"
+        border="1px"
+        borderColor="gray.300"
+        borderRadius="md"
+      >
+        <Flex alignItems="center" marginBottom="5">
+          <Logo boxSize={8} color="black" />
+          <Text fontWeight="bold" fontSize="sm">
+            Organize it all with TODO
+          </Text>
         </Flex>
-      ) : (
-        <Text>Loding</Text>
-      )}
-    </>
+        <Heading fontSize="x-large" fontWeight="bold" paddingBottom="2">
+          Sign in
+        </Heading>
+        <SignInButton
+          handleClick={async () => {
+            await auth.signinWithGithub();
+            router.push('/');
+          }}
+          leftIcon={<Github fill="gray.900" boxSize={5} mb={1} mr={1} />}
+        >
+          Sign in with Github
+        </SignInButton>
+        <SignInButton
+          handleClick={async () => {
+            await auth.signinWithGoogle();
+            router.push('/');
+          }}
+          leftIcon={<Google fill="gray.900" boxSize={5} mb={1} mr={1} />}
+        >
+          Sign in with Google
+        </SignInButton>
+      </Flex>
+    </Flex>
   );
-};
-
-/* export async function getStaticProps(context) {
-  const allTodos = await getAllTodos();
-  return {
-    props: {
-      allTodos
-    } // will be passed to the page component as props
-  };
-} */
-
-export default todo;
+}
