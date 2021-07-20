@@ -29,7 +29,7 @@ const Todo = ({ userTodos }) => {
     if (!auth.user) {
       router.push('/');
     }
-  },[])
+  },[auth.user])
   
   return (
     <>
