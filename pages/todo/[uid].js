@@ -137,7 +137,8 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       userTodos
-    } // will be passed to the page component as props
+    },
+    revalidate:5
   };
 }
 
