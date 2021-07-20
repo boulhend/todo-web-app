@@ -9,7 +9,7 @@ import { getUserTodos, getAllUser } from '../../lib/db-admin';
 import dateFormat from '../../utils/useDateformat';
 import AddTask from '../../components/AddTask';
 import OneTodo from '../../components/OneTodo';
-const todo = ({ userTodos }) => {
+const Todo = ({ userTodos }) => {
   const auth = useAuth();
   const router = useRouter();
   const TODAY = dateFormat(new Date());
@@ -139,4 +139,4 @@ export async function getStaticProps({ params }) {
   };
 }
 
-export default todo;
+export default Todo;
