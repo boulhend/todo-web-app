@@ -6,14 +6,18 @@ import { useAuth } from '../../lib/auth';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { getUserTodos, getAllUser } from '../../lib/db-admin';
+import dateFormat from '../../utils/useDateformat';
 import AddTask from '../../components/AddTask';
 import OneTodo from '../../components/OneTodo';
 
 const todo = ({ userTodos }) => {
   const auth = useAuth();
   const router = useRouter();
+  const TODAY = dateFormat(new Date());
   const [toggleAddTask, setToggleAddTask] = useState(false);
-  const [data, setData] = useState(userTodos);
+  const [data, setData] = useState(() =>
+    userTodos.filter((todo) => todo.createdAt === TODAY)
+  );
   const handleLogout = async () => {
     try {
       await auth.signOut();
@@ -60,10 +64,16 @@ const todo = ({ userTodos }) => {
             justifyContent="center"
             width="100%"
           >
-            <Flex flexDirection="column" width="100%">
-              <Heading fontSize="md" marginBottom="1rem">
-                Todos
-              </Heading>
+            <Flex flexDirection="column" width="100%" >
+              <Flex alignItems="baseline">
+                <Heading fontSize="lg" fontWeight="bold" marginBottom="1rem" marginRight="0.5rem">
+                  TODAY
+                </Heading>
+                <Text fontSize="sm" color="gray.500">
+                  {TODAY}
+                </Text>
+              </Flex>
+
               {data &&
                 data.map((todo) => (
                   <OneTodo
