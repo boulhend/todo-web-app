@@ -1,31 +1,54 @@
-import { Flex,Box } from '@chakra-ui/react';
+import { Flex, Box } from '@chakra-ui/react';
 import { Checkbox } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
-import AddTask from "./AddTask"
+import UpdateTask from './UpdateTask';
 import { useState } from 'react';
-const OneTodo = ({ todo,todoId }) => {
-const [editTodo,setEditTodo]=useState(false)
-const handleEdit=()=>{
-    setEditTodo(!editTodo)
-}
+const OneTodo = ({
+  todo:{id,todo,createdAt},
+  data,
+  setData
+}) => {
+  const [editTodo, setEditTodo] = useState(false);
+  const handleEdit = () => {
+    setEditTodo(!editTodo);
+  };
   return (
     <Flex
-      h="3rem"
+      minHeight="3rem"
       borderTop="1px"
       borderBottom="0.5px"
       borderColor="gray.300"
       width="100%"
       justifyContent="space-between"
       alignItems="center"
+      paddingY="0.7rem"
     >
-        
-      <Checkbox size="md" colorScheme="orange">
-        {todo.todo}
-      </Checkbox>
-      <Box>
-        <EditIcon cursor="pointer" boxSize="5" marginRight="1rem" onClick={handleEdit} />
-        <DeleteIcon cursor="pointer" boxSize="5" color="tomato" />
-      </Box>
+      {editTodo ? (
+        <UpdateTask
+          toggle={editTodo}
+          handleToggle={setEditTodo}
+          data={data}
+          setData={setData}
+          todoId={id}
+          startInput={todo}
+          newDate={new Date(createdAt)}
+        />
+      ) : (
+        <>
+          <Checkbox size="md" colorScheme="orange">
+            {todo}
+          </Checkbox>
+          <Box>
+            <EditIcon
+              cursor="pointer"
+              boxSize="5"
+              marginRight="1rem"
+              onClick={handleEdit}
+            />
+            <DeleteIcon cursor="pointer" boxSize="5" color="tomato" />
+          </Box>
+        </>
+      )}
     </Flex>
   );
 };

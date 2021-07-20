@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { getUserTodos, getAllUser } from '../../lib/db-admin';
 import AddTask from '../../components/AddTask';
-import OneTodo from '../../components/OneTodo'
+import OneTodo from '../../components/OneTodo';
 
 const todo = ({ userTodos }) => {
   const auth = useAuth();
@@ -64,7 +64,18 @@ const todo = ({ userTodos }) => {
               <Heading fontSize="md" marginBottom="1rem">
                 Todos
               </Heading>
-              {data && data.map( todo => <OneTodo key={JSON.stringify(todo.id)} todoId={todo.id} todo={todo} alignSelf="stretch"/>)}
+              {data &&
+                data.map((todo) => (
+                  <OneTodo
+                    key={JSON.stringify(todo.id)}
+                    toggle={toggleAddTask}
+                    handleToggle={setToggleAddTask}
+                    todo={todo}
+                    data={data}
+                    setData={setData}
+                    alignSelf="stretch"
+                  />
+                ))}
               {toggleAddTask && (
                 <AddTask
                   toggle={toggleAddTask}
