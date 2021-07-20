@@ -1,9 +1,18 @@
 import React from 'react';
 import { Button, Flex, Input } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
-import CustomDateInput from "./CustomDateInput"
+import CustomDateInput from './CustomDateInput';
 import 'react-datepicker/dist/react-datepicker.css';
-const TodoBody = ({children,todoInput,setTodoInput,startDate,setStartDate,handleSubmit,toggle,handleToggle}) => {
+const TodoBody = ({
+  children,
+  todoInput,
+  setTodoInput,
+  startDate,
+  setStartDate,
+  handleSubmit,
+  toggle,
+  handleToggle
+}) => {
   return (
     <Flex flexDirection="column">
       <Flex
@@ -31,6 +40,7 @@ const TodoBody = ({children,todoInput,setTodoInput,startDate,setStartDate,handle
           selected={startDate}
           onChange={(date) => setStartDate(date)}
           customInput={<CustomDateInput startDate={startDate} />}
+          minDate={new Date()}
           selfAlign="start"
         />
       </Flex>

@@ -9,7 +9,6 @@ import { getUserTodos, getAllUser } from '../../lib/db-admin';
 import dateFormat from '../../utils/useDateformat';
 import AddTask from '../../components/AddTask';
 import OneTodo from '../../components/OneTodo';
-
 const todo = ({ userTodos }) => {
   const auth = useAuth();
   const router = useRouter();

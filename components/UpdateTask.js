@@ -39,7 +39,7 @@ const UpdateTask = ({
       title: 'Todo updated successfully',
       description: `Todo date: ${createdAt === TODAY ? 'Today' : createdAt}`,
       status: 'success',
-      duration: 5000,
+      duration: 4000,
       isClosable: true
     });
   };

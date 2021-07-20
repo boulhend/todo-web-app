@@ -1,12 +1,16 @@
 import { Flex, Box, Text } from '@chakra-ui/react';
 import { Checkbox } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
-import dateFormat from '../utils/useDateformat';
 import UpdateTask from './UpdateTask';
 import { useState } from 'react';
-import { deleteTodo } from '../lib/db';
-const OneTodo = ({ todo: { id, todo, createdAt }, data, setData }) => {
+import { deleteTodo, updateTodo } from '../lib/db';
+const OneTodo = ({
+  todo: { id, todo, createdAt, completed },
+  data,
+  setData
+}) => {
   const [editTodo, setEditTodo] = useState(false);
+  const [hideEdit, setHideEdit] = useState(() => (!completed ? true : false));
   const handleEdit = () => {
     setEditTodo(!editTodo);
   };
@@ -14,6 +18,17 @@ const OneTodo = ({ todo: { id, todo, createdAt }, data, setData }) => {
     const newData = data.filter((todo) => todo.id !== id);
     setData(newData);
     deleteTodo(id);
+  };
+  const handleCompletion = () => {
+    setHideEdit(!hideEdit);
+    const newData = data.map((todo) => {
+      if (todo.id === id) {
+        todo.completed = true;
+      }
+      return todo;
+    });
+    setData(newData);
+    updateTodo(id, { completed: true });
   };
   return (
     <Flex
@@ -38,16 +53,23 @@ const OneTodo = ({ todo: { id, todo, createdAt }, data, setData }) => {
         />
       ) : (
         <>
-          <Checkbox size="md" colorScheme="orange">
-            {todo}
+          <Checkbox
+            size="md"
+            colorScheme="orange"
+            onChange={handleCompletion}
+            isDisabled={!hideEdit ? true : false}
+          >
+            <Text as={!hideEdit ? 'del' : ''}>{todo}</Text>
           </Checkbox>
           <Box>
-            <EditIcon
-              cursor="pointer"
-              boxSize="5"
-              marginRight="1rem"
-              onClick={handleEdit}
-            />
+            {hideEdit && (
+              <EditIcon
+                cursor="pointer"
+                boxSize="5"
+                marginRight="1rem"
+                onClick={handleEdit}
+              />
+            )}
             <DeleteIcon
               cursor="pointer"
               boxSize="5"
