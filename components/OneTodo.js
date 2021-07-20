@@ -3,14 +3,16 @@ import { Checkbox } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import UpdateTask from './UpdateTask';
 import { useState } from 'react';
-const OneTodo = ({
-  todo:{id,todo,createdAt},
-  data,
-  setData
-}) => {
+import { deleteTodo } from '../lib/db';
+const OneTodo = ({ todo: { id, todo, createdAt }, data, setData }) => {
   const [editTodo, setEditTodo] = useState(false);
   const handleEdit = () => {
     setEditTodo(!editTodo);
+  };
+  const handleDelete = () => {
+    const newData = data.filter((todo) => todo.id !== id);
+    setData(newData);
+    deleteTodo(id);
   };
   return (
     <Flex
@@ -45,7 +47,12 @@ const OneTodo = ({
               marginRight="1rem"
               onClick={handleEdit}
             />
-            <DeleteIcon cursor="pointer" boxSize="5" color="tomato" />
+            <DeleteIcon
+              cursor="pointer"
+              boxSize="5"
+              color="tomato"
+              onClick={handleDelete}
+            />
           </Box>
         </>
       )}

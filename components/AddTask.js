@@ -14,7 +14,8 @@ const AddTask = ({ toggle, handleToggle, data, setData }) => {
       id,
       uid: user.uid,
       todo: todoInput,
-      createdAt: dateFormat(startDate)
+      createdAt: dateFormat(startDate),
+      completed:false
     };
     setData([...data, newTodo]);
     createTodo(id, newTodo);
