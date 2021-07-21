@@ -18,7 +18,6 @@ const Todo = ({ userTodos, todosDate }) => {
   const auth = useAuth();
   const router = useRouter();
   //const TODAY = dateFormat(new Date());
-  console.log(todosDate);
   const [toggleAddTask, setToggleAddTask] = useState(false);
   const [data, setData] = useState([]);
   const handleLogout = async () => {
@@ -38,7 +37,7 @@ const Todo = ({ userTodos, todosDate }) => {
     if (userTodos !== undefined) {
       setData(() => userTodos.filter((todo) => todo.createdAt === todosDate));
     }
-  }, []);
+  }, [userTodos]);
 
   if (router.isFallback) {
     return <Loading />;
