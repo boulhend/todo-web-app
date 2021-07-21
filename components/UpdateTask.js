@@ -1,8 +1,9 @@
 import TodoBody from './TodoBody';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import dateFormat from '../utils/useDateformat';
 import { updateTodo } from '../lib/db';
 import { useToast } from '@chakra-ui/react';
+import DateContext from '../utils/DateContext';
 const UpdateTask = ({
   todoId,
   toggle,
@@ -15,10 +16,10 @@ const UpdateTask = ({
   const [startDate, setStartDate] = useState(newDate);
   const [todoInput, setTodoInput] = useState(startInput);
   const toast = useToast();
-
+  const todosDate = useContext(DateContext);
   const handleSubmit = () => {
     const createdAt = dateFormat(startDate);
-    const TODAY = dateFormat(new Date());
+    //const todosDate = dateFormat(new Date());
     let newTodos = data.map((todo) => {
       if (todo.id === todoId) {
         todo.todo = todoInput;
@@ -27,8 +28,10 @@ const UpdateTask = ({
       return todo;
     });
 
-    if (createdAt !== TODAY) {
-      const todosFiltred = newTodos.filter((todo) => todo.createdAt === TODAY);
+    if (createdAt !== todosDate) {
+      const todosFiltred = newTodos.filter(
+        (todo) => todo.createdAt === todosDate
+      );
       setData(todosFiltred);
     } else {
       setData(newTodos);
@@ -37,7 +40,9 @@ const UpdateTask = ({
     handleToggle(!toggle);
     toast({
       title: 'Todo updated successfully',
-      description: `Todo date: ${createdAt === TODAY ? 'Today' : createdAt}`,
+      description: `Todo date: ${
+        createdAt === todosDate ? 'todosDate' : createdAt
+      }`,
       status: 'success',
       duration: 4000,
       isClosable: true

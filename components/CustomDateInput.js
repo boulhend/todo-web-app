@@ -19,11 +19,11 @@ const CustomDateInput = forwardRef(({ startDate, onClick }, ref) => {
       ref={ref}
     >
       <CalendarIcon boxSize="4" />
-      <Text marginLeft="1" fontSize="sm">
+      {startDate ?<Text marginLeft="1" fontSize="sm">
         {dateFormat(startDate) === dateFormat(new Date())
           ? 'Today'
           : dateFormat(startDate)}
-      </Text>
+      </Text>:<Text marginLeft="1" fontSize="sm">Choose an upcoming date</Text>}
     </Flex>
   );
 });

@@ -1,15 +1,16 @@
-import { Flex, Link, Box, Heading, Text } from '@chakra-ui/react';
+import { Flex, Heading, Text } from '@chakra-ui/react';
 import { useAuth } from '../lib/auth';
 import { Logo, Github, Google } from '../styles/theme';
 import { useRouter } from 'next/router';
 import SignInButton from '../components/SignInButton';
-import { useEffect } from 'react';
+import Loading from '../components/Loading';
+import dateFormat from '../utils/useDateformat';
 export default function Home() {
   const auth = useAuth();
   const router = useRouter();
   if (auth.user) {
-    router.push(`/todo/${auth.user.uid}`);
-    return <Text>Loading ...</Text>;
+    router.push(`/todo/${auth.user.uid}/${dateFormat(new Date())}`);
+    return <Loading/>;
   }
   return (
     <Flex

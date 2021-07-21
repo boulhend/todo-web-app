@@ -49,7 +49,7 @@ const OneTodo = ({
           setData={setData}
           todoId={id}
           startInput={todo}
-          newDate={new Date(createdAt)}
+          newDate={new Date(createdAt.replaceAll('-','/'))}
         />
       ) : (
         <>
