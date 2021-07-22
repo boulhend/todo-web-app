@@ -17,7 +17,6 @@ import { format } from 'date-fns';
 const Todo = ({ userTodos, todosDate }) => {
   const auth = useAuth();
   const router = useRouter();
-  //const TODAY = dateFormat(new Date());
   const [startDate, setStartDate] = useState(new Date());
   const [toggleAddTask, setToggleAddTask] = useState(false);
   const [data, setData] = useState([]);
@@ -46,11 +45,11 @@ const Todo = ({ userTodos, todosDate }) => {
     }
   }, [userTodos, titleDate]);
 
-  useEffect(()=>{
-    if(todosDate !== undefined){
-      setStartDate(new Date(todosDate.replaceAll('-','/')))
+  useEffect(() => {
+    if (todosDate !== undefined) {
+      setStartDate(new Date(todosDate.replaceAll('-', '/')));
     }
-  },[todosDate])
+  }, [todosDate]);
 
   if (router.isFallback) {
     return <Loading />;
@@ -128,15 +127,14 @@ const Todo = ({ userTodos, todosDate }) => {
                       alignSelf="stretch"
                     />
                   ))}
-                {toggleAddTask && (
+                {toggleAddTask ? (
                   <AddTask
                     toggle={toggleAddTask}
                     handleToggle={setToggleAddTask}
                     data={data}
                     setData={setData}
                   />
-                )}
-                {!toggleAddTask && (
+                ) : (
                   <Button
                     variant="ghost"
                     size="md"

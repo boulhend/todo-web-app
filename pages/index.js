@@ -10,7 +10,7 @@ export default function Home() {
   const router = useRouter();
   if (auth.user) {
     router.push(`/todo/${auth.user.uid}/${dateFormat(new Date())}`);
-    return <Loading/>;
+    return <Loading />;
   }
   return (
     <Flex

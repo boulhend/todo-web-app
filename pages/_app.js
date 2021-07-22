@@ -19,7 +19,13 @@ function MyApp({ Component, pageProps }) {
             html {
               min-width: 360px;
               scroll-behavior: smooth;
+              -ms-overflow-style: none;  /* IE and Edge */
+              scrollbar-width: none;  /* Firefox */
             }
+            html::-webkit-scrollbar {
+              display: none;
+            }
+
             #__next {
               display: flex;
               flex-direction: column;
