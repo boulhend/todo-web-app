@@ -56,6 +56,7 @@ const OneTodo = ({
           <Checkbox
             size="md"
             colorScheme="orange"
+            borderColor="gray.500"
             onChange={handleCompletion}
             isDisabled={!hideEdit ? true : false}
           >
