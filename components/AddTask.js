@@ -1,27 +1,29 @@
 import TodoBody from './TodoBody';
-import { useState } from 'react';
+import { useState,useContext, useEffect } from 'react';
 import { useAuth } from '../lib/auth';
 import { createTodo } from '../lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import dateFormat from '../utils/useDateformat';
 import { useToast } from '@chakra-ui/react';
+import DateContext from '../utils/DateContext';
 const AddTask = ({ toggle, handleToggle, data, setData }) => {
   const { user } = useAuth();
   const toast = useToast();
+  const todosDate = useContext(DateContext);
   const [startDate, setStartDate] = useState(new Date());
   const [todoInput, setTodoInput] = useState('');
+  
   const handleSubmit = () => {
     const id = uuidv4();
     const createdAt = dateFormat(startDate);
-    const TODAY = dateFormat(new Date());
-    const newTodo = {
+        const newTodo = {
       id,
       uid: user.uid,
       todo: todoInput,
       createdAt,
       completed: false
     };
-    if (newTodo.createdAt === TODAY) {
+    if (newTodo.createdAt === todosDate) {
       setData([...data, newTodo]);
     }
     createTodo(id, newTodo);
@@ -36,7 +38,11 @@ const AddTask = ({ toggle, handleToggle, data, setData }) => {
       isClosable: true
     });
   };
-
+  useEffect(()=>{
+    if(todosDate !== undefined){
+      setStartDate(new Date(todosDate.replaceAll('-','/')))
+    }
+  },[todosDate])
   return (
     <TodoBody
       todoInput={todoInput}

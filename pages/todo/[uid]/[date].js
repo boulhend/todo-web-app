@@ -18,8 +18,10 @@ const Todo = ({ userTodos, todosDate }) => {
   const auth = useAuth();
   const router = useRouter();
   //const TODAY = dateFormat(new Date());
+  const [startDate, setStartDate] = useState(new Date());
   const [toggleAddTask, setToggleAddTask] = useState(false);
   const [data, setData] = useState([]);
+  const [titleDate, setTitleDate] = useState('');
   const handleLogout = async () => {
     try {
       await auth.signOut();
@@ -37,9 +39,23 @@ const Todo = ({ userTodos, todosDate }) => {
     if (userTodos !== undefined) {
       setData(() => userTodos.filter((todo) => todo.createdAt === todosDate));
     }
-  }, [userTodos]);
+    if (todosDate !== undefined) {
+      setTitleDate(
+        format(new Date(todosDate.replaceAll('-', '/')), 'EEE dd MMM yyyy')
+      );
+    }
+  }, [userTodos, titleDate]);
+
+  useEffect(()=>{
+    if(todosDate !== undefined){
+      setStartDate(new Date(todosDate.replaceAll('-','/')))
+    }
+  },[todosDate])
 
   if (router.isFallback) {
+    return <Loading />;
+  }
+  if (userTodos === undefined || todosDate === undefined) {
     return <Loading />;
   }
   return (
@@ -85,15 +101,17 @@ const Todo = ({ userTodos, todosDate }) => {
                       marginRight="0.5rem"
                       color="gray.500"
                     >
-                      {format(new Date(todosDate.replaceAll('-','/')),'EEE MMM yy')}
+                      {titleDate}
                     </Heading>
                   </Flex>
                   <Flex>
                     <DatePicker
-                      selected={new Date()}
+                      selected={startDate}
                       customInput={<CustomDateInput />}
                       minDate={new Date()}
-                      onChange={(e)=>router.push(`/todo/${auth.user.uid}/${dateFormat(e)}`)}
+                      onChange={(e) =>
+                        router.push(`/todo/${auth.user.uid}/${dateFormat(e)}`)
+                      }
                     />
                   </Flex>
                 </Flex>

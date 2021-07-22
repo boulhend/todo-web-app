@@ -23,7 +23,7 @@ const CustomDateInput = forwardRef(({ startDate, onClick }, ref) => {
         {dateFormat(startDate) === dateFormat(new Date())
           ? 'Today'
           : dateFormat(startDate)}
-      </Text>:<Text marginLeft="1" fontSize="sm">Choose an upcoming date</Text>}
+      </Text>:<Text marginLeft="1" fontSize="sm">Choose a different date</Text>}
     </Flex>
   );
 });
