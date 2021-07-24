@@ -5,7 +5,7 @@ import { Logo } from '../../../styles/theme';
 import { useAuth } from '../../../lib/auth';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { getUserTodos, getAllUser } from '../../../lib/db-admin';
+import { getUserTodos } from '../../../lib/db-admin';
 import dateFormat from '../../../utils/useDateformat';
 import AddTask from '../../../components/AddTask';
 import OneTodo from '../../../components/OneTodo';
@@ -159,7 +159,7 @@ const Todo = ({ userTodos, todosDate }) => {
   );
 };
 
-export async function getStaticPaths() {
+/* export async function getStaticPaths() {
   const users = await getAllUser();
   //Create seven week dates
   const dates = [];
@@ -171,17 +171,17 @@ export async function getStaticPaths() {
     .map((user) => dates.map((date) => ({ params: { uid: user.uid, date } })))
     .flat();
   return { paths, fallback: true };
-}
+} */
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
+  console.log(params.uid)
   const userTodos = await getUserTodos(params.uid, params.date);
   return {
     props: {
       userTodos,
       todosDate: params.date
-    },
-    revalidate: 1
-  };
+    }
+  }
 }
 
 export default Todo;
